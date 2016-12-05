@@ -1,9 +1,5 @@
 def input_students
     
-    require 'pry'
-    gem 'pry-byebug'
-    binding.pry
-    
     puts "Please enter the names of the students"
     puts "To finish, just hit return twice"
     # create an empty array
@@ -23,13 +19,16 @@ def input_students
 end
 
 def print_header
-    puts "The students of Villains Academy"
+    puts "The students of Villains Academy (whose names begin with 'T')"
     puts "-------------"
 end
 
 def print(students)
     students.each_with_index do |student, index|
+        student_name = student[:name]
+        if student_name.match(/^T/)
             puts "#{index + 1}. #{student[:name]} (#{student[:cohort].capitalize} cohort)"
+        end
     end
 end
 
