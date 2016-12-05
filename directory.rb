@@ -19,14 +19,13 @@ def input_students
 end
 
 def print_header
-    puts "The students of Villains Academy (whose names begin with 'T')"
+    puts "The students of Villains Academy (whose names are less that 12 characters long)"
     puts "-------------"
 end
 
 def print(students)
     students.each_with_index do |student, index|
-        student_name = student[:name]
-        if student_name.match(/^T/)
+        if student[:name].length < 12
             puts "#{index + 1}. #{student[:name]} (#{student[:cohort].capitalize} cohort)"
         end
     end
