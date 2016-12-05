@@ -1,4 +1,9 @@
 def input_students
+    
+    require 'pry'
+    gem 'pry-byebug'
+    binding.pry
+    
     puts "Please enter the names of the students"
     puts "To finish, just hit return twice"
     # create an empty array
@@ -23,8 +28,8 @@ def print_header
 end
 
 def print(students)
-    students.each do |student|
-        puts "#{student[:name]} (#{student[:cohort]} cohort)"
+    students.each_with_index do |student, index|
+            puts "#{index + 1}. #{student[:name]} (#{student[:cohort].capitalize} cohort)"
     end
 end
 
