@@ -72,23 +72,6 @@ def input_students
     
 end
 
-def print_students_by_cohort(students)
-    w = get_terminal_width
-    cohorts = get_cohorts
-    cohorts.each do |x|
-        puts "#{x} cohort:".center(w)
-        puts "\n"
-        students.map do |i|
-            if i[:cohort] == x.to_sym
-                puts "#{i[:name]} - Age: #{i[:age]}, Height: #{i[:height]}, Birthplace: #{i[:birthplace]}, Hobbies: #{i[:hobbies]}".center(w)
-            end
-        end
-        puts "\n"
-        puts "-------------".center(w)
-        puts "\n"
-    end
-end
-
 def print_header
     w = get_terminal_width
     puts "\n\n"
@@ -99,22 +82,47 @@ end
 
 def print(students)
     w = get_terminal_width
-    index = 0
-    puts "\n"
-    while index < students.size
-        puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort) - Age: #{students[index][:age]}, Height: #{students[index][:height]}, Birthplace: #{students[index][:birthplace]}, Hobbies: #{students[index][:hobbies]}".center(w)
-        index += 1
+    if students.size != 0
+        index = 0
+        puts "\n"
+        while index < students.size
+            puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort) - Age: #{students[index][:age]}, Height: #{students[index][:height]}, Birthplace: #{students[index][:birthplace]}, Hobbies: #{students[index][:hobbies]}".center(w)
+            index += 1
+        end
+        puts "\n"
+        puts "--------------------------".center(w)
+        puts "\n"
+    else
+        puts "There are no students. I'm lonely :(".center(w)
     end
-    puts "\n"
-    puts "--------------------------".center(w)
-    puts "\n"
+end
+
+def print_students_by_cohort(students)
+    w = get_terminal_width
+    if students.size != 0
+        cohorts = get_cohorts
+        cohorts.each do |x|
+            puts "#{x} cohort:".center(w)
+            puts "\n"
+            students.map do |i|
+                if i[:cohort] == x.to_sym
+                    puts "#{i[:name]} - Age: #{i[:age]}, Height: #{i[:height]}, Birthplace: #{i[:birthplace]}, Hobbies: #{i[:hobbies]}".center(w)
+                end
+            end
+            puts "\n"
+            puts "-------------".center(w)
+            puts "\n"
+        end
+    end
 end
 
 def print_footer(names)
     w = get_terminal_width
-    puts "\n"
-    puts names.count == 1 ? "Overall, we have #{names.count} great student".center(w) : "Overall, we have #{names.count} great students".center(w)
-    puts "\n"
+    if names.size != 0
+        puts "\n"
+        puts names.count == 1 ? "Overall, we have #{names.count} great student".center(w) : "Overall, we have #{names.count} great students".center(w)
+        puts "\n"
+    end
 end
 
 students = input_students
