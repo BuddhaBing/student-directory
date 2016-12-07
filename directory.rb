@@ -24,39 +24,39 @@ def input_students
     while decision != "q" do
         
         puts "#{question} name".center(w)
-        name = gets.chomp.capitalize
+        name = gets.delete("\r\n").capitalize
         while name.empty? do
             puts "Error: No name entered".center(w)
             puts "Please enter the student's name".center(w)
-            name = gets.chomp.capitalize
+            name = gets.delete("\r\n").capitalize
         end
         break if name == "Q"
         
         puts "#{question} cohort".center(w)
-        cohort = gets.chomp.capitalize.to_sym
+        cohort = gets.delete("\r\n").capitalize.to_sym
         while !cohorts.include? cohort.capitalize.to_s do
             puts "Please enter one of the following cohorts: #{cohorts.join(', ')}".center(w)
-            cohort = gets.chomp.capitalize.to_sym
+            cohort = gets.delete("\r\n").capitalize.to_sym
         end
         break if cohort == :Q
         
         puts "#{question} age".center(w)
-        age = gets.chomp.capitalize
+        age = gets.delete("\r\n").capitalize
         age = "Missing" if age == ""
         break if age == "Q"
         
         puts "#{question} height".center(w)
-        height = gets.chomp.capitalize
+        height = gets.delete("\r\n").capitalize
         height = "Missing" if height == ""
         break if height == "Q"
         
         puts "#{question} birthplace".center(w)
-        birthplace = gets.chomp.capitalize
+        birthplace = gets.delete("\r\n").capitalize
         birthplace = "Missing" if birthplace == ""
         break if birthplace == "Q"
         
         puts "#{question} hobbies".center(w)
-        hobbies = gets.chomp.capitalize
+        hobbies = gets.delete("\r\n").capitalize
         hobbies = "Missing" if hobbies == ""
         break if hobbies == "Q"
         
@@ -64,7 +64,7 @@ def input_students
         puts students.count == 1 ? "Now we have #{students.count} student".center(w) : "Now we have #{students.count} students".center(w)
         puts "\n"
         puts "Hit return to enter another student, or type 'Q' to quit.".center(w)
-        decision = gets.chomp.downcase
+        decision = gets.delete("\r\n").downcase
         
     end
     # return the array of students
