@@ -61,9 +61,8 @@ def input_students
         break if hobbies == "Q"
         
         students << {name: name, cohort: cohort, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
-        #students.merge(default_vals)
-        puts "Now we have #{students.count} students\n\n".center(w)
-        
+        puts students.count == 1 ? "Now we have #{students.count} student".center(w) : "Now we have #{students.count} students".center(w)
+        puts "\n"
         puts "Hit return to enter another student, or type 'Q' to quit.".center(w)
         decision = gets.chomp.downcase
         
@@ -92,23 +91,29 @@ end
 
 def print_header
     w = get_terminal_width
-    puts "The students of Villains Academy".center(w)
-    puts "-------------".center(w)
+    puts "\n\n"
+    header = "The Students of Villains Academy"
+    puts header.center(w)
+    puts ("-" * header.length).center(w)
 end
 
 def print(students)
     w = get_terminal_width
     index = 0
+    puts "\n"
     while index < students.size
         puts "#{index + 1}. #{students[index][:name]} (#{students[index][:cohort]} cohort) - Age: #{students[index][:age]}, Height: #{students[index][:height]}, Birthplace: #{students[index][:birthplace]}, Hobbies: #{students[index][:hobbies]}".center(w)
         index += 1
     end
+    puts "\n"
+    puts "--------------------------".center(w)
+    puts "\n"
 end
 
 def print_footer(names)
     w = get_terminal_width
     puts "\n"
-    puts "Overall, we have #{names.count} great students".center(w)
+    puts names.count == 1 ? "Overall, we have #{names.count} great student".center(w) : "Overall, we have #{names.count} great students".center(w)
     puts "\n"
 end
 
