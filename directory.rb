@@ -9,6 +9,33 @@ def get_cohorts
     cohorts
 end
 
+def interactive_menu
+    w = get_terminal_width
+    students = []
+	loop do
+        puts "1. Input the students".center(w)
+        puts "2. Show the students".center(w)
+        puts "9. Exit".center(w) # 9 because we'll be adding more items
+        selection = gets.chomp
+        
+        case selection
+            when "1"
+                students = input_students
+            when "2"
+                print_header
+                print_students(students)
+                print_students_by_cohort(students)
+                print_footer(students)
+            when "9"
+                exit
+            else
+                puts "I don't know what you meant, try again"
+        end
+        
+    end
+
+end
+
 def input_students
     w = get_terminal_width
     cohorts = get_cohorts
@@ -16,13 +43,13 @@ def input_students
     puts "Please enter the details of the students".center(w)
     puts "To finish, type 'Q' at any time and hit return".center(w)
     puts "\n"
-    
+
     students = []
     decision = ""
     question = "Please enter the student's"
-    
+
     while decision != "q" do
-        
+
         puts "#{question} name".center(w)
         name = gets.delete("\r\n").capitalize
         while name.empty? do
@@ -31,7 +58,7 @@ def input_students
             name = gets.delete("\r\n").capitalize
         end
         break if name == "Q"
-        
+
         puts "#{question} cohort".center(w)
         cohort = gets.delete("\r\n").capitalize.to_sym
         while !cohorts.include? cohort.capitalize.to_s do
@@ -39,37 +66,37 @@ def input_students
             cohort = gets.delete("\r\n").capitalize.to_sym
         end
         break if cohort == :Q
-        
+
         puts "#{question} age".center(w)
         age = gets.delete("\r\n").capitalize
         age = "Missing" if age == ""
         break if age == "Q"
-        
+
         puts "#{question} height".center(w)
         height = gets.delete("\r\n").capitalize
         height = "Missing" if height == ""
         break if height == "Q"
-        
+
         puts "#{question} birthplace".center(w)
         birthplace = gets.delete("\r\n").capitalize
         birthplace = "Missing" if birthplace == ""
         break if birthplace == "Q"
-        
+
         puts "#{question} hobbies".center(w)
         hobbies = gets.delete("\r\n").capitalize
         hobbies = "Missing" if hobbies == ""
         break if hobbies == "Q"
-        
+
         students << {name: name, cohort: cohort, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
         puts students.count == 1 ? "Now we have #{students.count} student".center(w) : "Now we have #{students.count} students".center(w)
         puts "\n"
         puts "Hit return to enter another student, or type 'Q' to quit.".center(w)
         decision = gets.delete("\r\n").downcase
-        
+
     end
     # return the array of students
     return students
-    
+
 end
 
 def print_header
@@ -80,7 +107,7 @@ def print_header
     puts ("-" * header.length).center(w)
 end
 
-def print(students)
+def print_students(students)
     w = get_terminal_width
     if students.size != 0
         index = 0
@@ -125,8 +152,5 @@ def print_footer(names)
     end
 end
 
-students = input_students
-print_header
-print(students)
-print_students_by_cohort(students)
-print_footer(students)
+interactive_menu 
+
