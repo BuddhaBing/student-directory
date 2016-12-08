@@ -8,28 +8,32 @@
 def try_load_students
     filename = ARGV.first
     if filename.nil?
-        load_students("students.csv")
+        load_students
     elsif
         File.exists?(filename)
         load_students(filename)
     else
-        puts "Sorry, #{filename} does not exist."
+        puts "Sorry, #{filename} does not exist.".center(@w)
         exit
     end
 end
 
 def load_students(filename = "students.csv")
-    file = File.open(filename, "r") 
-    file.readlines.each do |line|
-        name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
-        add_student_details(name, cohort, age, height, birthplace, hobbies)
+    if File.exists?(filename)
+        file = File.open(filename, "r") 
+        file.readlines.each do |line|
+            name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
+            add_student_details(name, cohort, age, height, birthplace, hobbies)
+        end
+        file.close
+        puts "\n"
+        puts "Loaded #{@students.count} students from #{filename}".center(@w)
+        puts "\n"
+        puts "--------------------------".center(@w)
+        puts "\n"
+    else
+        puts "Sorry, #{filename} does not exist.".center(@w)
     end
-    file.close
-    puts "\n"
-    puts "Loaded #{@students.count} students from #{filename}".center(@w)
-    puts "\n"
-    puts "--------------------------".center(@w)
-    puts "\n"
 end
 
 def interactive_menu
@@ -40,11 +44,13 @@ def interactive_menu
 end
 
 def print_menu
+    puts "\n"
     puts "1. Input the students".center(@w)
     puts "2. Show the students".center(@w)
-    puts "3. Save the list to students.csv".center(@w)
-    puts "4. Load the list from students.csv".center(@w)
+    puts "3. Save the list to file".center(@w)
+    puts "4. Load the list from file".center(@w)
     puts "9. Exit".center(@w)
+    puts "\n"
 end
 
 def process(selection)
@@ -56,11 +62,18 @@ def process(selection)
             puts "Listing students...".center(@w)
             show_students
         when "3"
+            puts "You have selected: \"Save Students\"".center(@w)
+            puts "Please enter the filename you would like to save to:".center(@w)
+            filename = gets.chomp
+            filename = "students.csv" if filename == ""
+            save_students(filename)
             puts "Saving students...".center(@w)
-            save_students
         when "4"
-            puts "Loading students...".center(@w)
-            load_students
+            puts "You have selected: \"Load Students\"".center(@w)
+            puts "Please enter the filename you would like to load from:".center(@w)
+            filename = gets.chomp
+            filename = "students.csv" if filename == ""
+            load_students(filename)
         when "9"
             puts "Exiting application...".center(@w)
             exit
@@ -167,8 +180,8 @@ def print_footer
     end
 end
 
-def save_students
-    file = File.open("students.csv", "w")
+def save_students(filename = "students.csv")
+    file = File.open(filename, "w")
     @students.each do |student|
         student_data = [student[:name], student[:cohort], student[:age], student[:height], student[:birthplace], student[:hobbies]]
         csv_line = student_data.join(",")
