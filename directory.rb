@@ -20,7 +20,7 @@ def load_students(filename = "students.csv")
     file = File.open(filename, "r") 
     file.readlines.each do |line|
         name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
-        @students << {name: name, cohort: cohort.to_sym, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
+        add_student_details(name, cohort, age, height, birthplace, hobbies)
     end
     file.close
     puts "\n"
@@ -67,59 +67,37 @@ def input_students
     puts "Please enter the details of the students".center(@w)
     puts "To finish, type 'Q' at any time and hit return".center(@w)
     puts "\n"
-
-    decision = ""
-    question = "Please enter the student's"
-
-    while decision != "q" do
-
-        puts "#{question} name".center(@w)
-        name = STDIN.gets.delete("\r\n").capitalize
-        while name.empty? do
-            puts "Error: No name entered".center(@w)
-            puts "Please enter the student's name".center(@w)
-            name = STDIN.gets.delete("\r\n").capitalize
+    specifics = %w(name cohort age height birthplace hobbies)
+    answer = ""
+    while answer != "q" do
+        student_details = []
+        n = 0
+        specifics.each do |attribute|
+            puts "Please enter the student's #{attribute}".center(@w)
+            answer = STDIN.gets.chomp.capitalize #if STDIN.gets.chomp.capitalize != ""
+            break if answer == "Q"
+            if n < 2
+                while answer == "" do
+                    puts "Error: No #{attribute} entered".center(@w)
+                    puts "Please enter the student's #{attribute}".center(@w)
+                    answer = STDIN.gets.chomp.capitalize #if STDIN.gets.chomp.capitalize != ""
+                end
+            else
+                answer = "Missing"
+            end
+            student_details << answer
+            n += 1
         end
-        break if name == "Q"
-
-        puts "#{question} cohort".center(@w)
-        cohort = STDIN.gets.delete("\r\n").capitalize.to_sym
-        while !@cohorts.include? cohort.capitalize.to_s do
-            puts "Please enter one of the following cohorts: #{@cohorts.join(', ')}".center(@w)
-            cohort = STDIN.gets.delete("\r\n").capitalize.to_sym
-        end
-        break if cohort == :Q
-
-        puts "#{question} age".center(@w)
-        age = STDIN.gets.delete("\r\n").capitalize
-        age = "Missing" if age == ""
-        break if age == "Q"
-
-        puts "#{question} height".center(@w)
-        height = STDIN.gets.delete("\r\n").capitalize
-        height = "Missing" if height == ""
-        break if height == "Q"
-
-        puts "#{question} birthplace".center(@w)
-        birthplace = STDIN.gets.delete("\r\n").capitalize
-        birthplace = "Missing" if birthplace == ""
-        break if birthplace == "Q"
-
-        puts "#{question} hobbies".center(@w)
-        hobbies = STDIN.gets.delete("\r\n").capitalize
-        hobbies = "Missing" if hobbies == ""
-        break if hobbies == "Q"
-
-        @students << {name: name, cohort: cohort, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
+        add_student_details(*student_details)
         puts @students.count == 1 ? "Now we have #{@students.count} student".center(@w) : "Now we have #{@students.count} students".center(@w)
         puts "\n"
         puts "Hit return to enter another student, or type 'Q' to go back to the previous menu.".center(@w)
-        decision = STDIN.gets.delete("\r\n").downcase
-
+        answer = STDIN.gets.chomp.downcase
     end
-    # return the array of students
-    return @students
+end
 
+def add_student_details(name, cohort, age, height, birthplace, hobbies)
+    @students << {name: name, cohort: cohort.to_sym, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
 end
 
 def show_students
