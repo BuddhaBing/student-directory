@@ -7,8 +7,10 @@
 
 def try_load_students
     filename = ARGV.first
-    return if filename.nil?
-    if File.exists?(filename)
+    if filename.nil?
+        load_students("students.csv")
+    elsif
+        File.exists?(filename)
         load_students(filename)
     else
         puts "Sorry, #{filename} does not exist."
@@ -42,23 +44,28 @@ def print_menu
     puts "2. Show the students".center(@w)
     puts "3. Save the list to students.csv".center(@w)
     puts "4. Load the list from students.csv".center(@w)
-    puts "9. Exit".center(@w) # 9 because we'll be adding more items
+    puts "9. Exit".center(@w)
 end
 
 def process(selection)
     case selection
         when "1"
+            puts "You have selected: \"Input Students\"".center(@w)
             input_students
         when "2"
+            puts "Listing students...".center(@w)
             show_students
         when "3"
+            puts "Saving students...".center(@w)
             save_students
         when "4"
+            puts "Loading students...".center(@w)
             load_students
         when "9"
+            puts "Exiting application...".center(@w)
             exit
         else
-            puts "I don't know what you meant, try again"
+            puts "I don't know what you meant, try again".center(@w)
     end 
 end
 
@@ -74,13 +81,18 @@ def input_students
         n = 0
         specifics.each do |attribute|
             puts "Please enter the student's #{attribute}".center(@w)
-            answer = STDIN.gets.chomp.capitalize #if STDIN.gets.chomp.capitalize != ""
+            answer = STDIN.gets.chomp.capitalize
             break if answer == "Q"
-            if n < 2
+            if n == 0
                 while answer == "" do
                     puts "Error: No #{attribute} entered".center(@w)
                     puts "Please enter the student's #{attribute}".center(@w)
-                    answer = STDIN.gets.chomp.capitalize #if STDIN.gets.chomp.capitalize != ""
+                    answer = STDIN.gets.chomp.capitalize
+                end
+            elsif n == 1
+                while !@cohorts.include? answer.capitalize.to_s do
+                    puts "Error! Please input one of the following cohorts: #{@cohorts.join(', ')}".center(@w)
+                    answer = STDIN.gets.chomp.capitalize
                 end
             else
                 answer = "Missing"
