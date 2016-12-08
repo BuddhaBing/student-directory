@@ -5,14 +5,26 @@
 
 @cohorts = %w(January February March April May June July August September October November December)
 
-def load_students
-    file = File.open("students.csv", "r") 
+def try_load_students
+    filename = ARGV.first
+    return if filename.nil?
+    if File.exists?(filename)
+        load_students(filename)
+    else
+        puts "Sorry, #{filename} does not exist."
+        exit
+    end
+end
+
+def load_students(filename = "students.csv")
+    file = File.open(filename, "r") 
     file.readlines.each do |line|
         name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
         @students << {name: name, cohort: cohort.to_sym, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
     end
     file.close
-    puts "Students loaded from file".center(@w)
+    puts "\n"
+    puts "Loaded #{@students.count} students from #{filename}".center(@w)
     puts "\n"
     puts "--------------------------".center(@w)
     puts "\n"
@@ -21,7 +33,7 @@ end
 def interactive_menu
 	loop do
 	    print_menu
-        process(gets.chomp)
+        process(STDIN.gets.chomp)
     end
 end
 
@@ -62,39 +74,39 @@ def input_students
     while decision != "q" do
 
         puts "#{question} name".center(@w)
-        name = gets.delete("\r\n").capitalize
+        name = STDIN.gets.delete("\r\n").capitalize
         while name.empty? do
             puts "Error: No name entered".center(@w)
             puts "Please enter the student's name".center(@w)
-            name = gets.delete("\r\n").capitalize
+            name = STDIN.gets.delete("\r\n").capitalize
         end
         break if name == "Q"
 
         puts "#{question} cohort".center(@w)
-        cohort = gets.delete("\r\n").capitalize.to_sym
+        cohort = STDIN.gets.delete("\r\n").capitalize.to_sym
         while !@cohorts.include? cohort.capitalize.to_s do
             puts "Please enter one of the following cohorts: #{@cohorts.join(', ')}".center(@w)
-            cohort = gets.delete("\r\n").capitalize.to_sym
+            cohort = STDIN.gets.delete("\r\n").capitalize.to_sym
         end
         break if cohort == :Q
 
         puts "#{question} age".center(@w)
-        age = gets.delete("\r\n").capitalize
+        age = STDIN.gets.delete("\r\n").capitalize
         age = "Missing" if age == ""
         break if age == "Q"
 
         puts "#{question} height".center(@w)
-        height = gets.delete("\r\n").capitalize
+        height = STDIN.gets.delete("\r\n").capitalize
         height = "Missing" if height == ""
         break if height == "Q"
 
         puts "#{question} birthplace".center(@w)
-        birthplace = gets.delete("\r\n").capitalize
+        birthplace = STDIN.gets.delete("\r\n").capitalize
         birthplace = "Missing" if birthplace == ""
         break if birthplace == "Q"
 
         puts "#{question} hobbies".center(@w)
-        hobbies = gets.delete("\r\n").capitalize
+        hobbies = STDIN.gets.delete("\r\n").capitalize
         hobbies = "Missing" if hobbies == ""
         break if hobbies == "Q"
 
@@ -102,7 +114,7 @@ def input_students
         puts @students.count == 1 ? "Now we have #{@students.count} student".center(@w) : "Now we have #{@students.count} students".center(@w)
         puts "\n"
         puts "Hit return to enter another student, or type 'Q' to go back to the previous menu.".center(@w)
-        decision = gets.delete("\r\n").downcase
+        decision = STDIN.gets.delete("\r\n").downcase
 
     end
     # return the array of students
@@ -179,6 +191,6 @@ def save_students
     puts "\n"
 end
 
-
+try_load_students
 interactive_menu 
 
