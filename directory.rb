@@ -20,12 +20,12 @@ end
 
 def load_students(filename = "students.csv")
     if File.exists?(filename)
-        file = File.open(filename, "r") 
-        file.readlines.each do |line|
-            name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
-            add_student_details(name, cohort, age, height, birthplace, hobbies)
+        File.open(filename, "r") do |f|
+            f.readlines.each do |line|
+                name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
+                add_student_details(name, cohort, age, height, birthplace, hobbies)
+            end
         end
-        file.close
         puts "\n"
         puts "Loaded #{@students.count} students from #{filename}".center(@w)
         puts "\n"
@@ -35,6 +35,21 @@ def load_students(filename = "students.csv")
         puts "Sorry, #{filename} does not exist.".center(@w)
     end
 end
+
+def save_students(filename = "students.csv")
+    File.open(filename, "w") do |f|
+        @students.each do |student|
+            student_data = [student[:name], student[:cohort], student[:age], student[:height], student[:birthplace], student[:hobbies]]
+            csv_line = student_data.join(",")
+            f.puts csv_line
+        end
+    end
+    puts "Students saved to file".center(@w)
+    puts "\n"
+    puts "--------------------------".center(@w)
+    puts "\n"
+end
+
 
 def interactive_menu
 	loop do
@@ -180,19 +195,6 @@ def print_footer
     end
 end
 
-def save_students(filename = "students.csv")
-    file = File.open(filename, "w")
-    @students.each do |student|
-        student_data = [student[:name], student[:cohort], student[:age], student[:height], student[:birthplace], student[:hobbies]]
-        csv_line = student_data.join(",")
-        file.puts csv_line
-    end
-    file.close
-    puts "Students saved to file".center(@w)
-    puts "\n"
-    puts "--------------------------".center(@w)
-    puts "\n"
-end
 
 try_load_students
 interactive_menu 
