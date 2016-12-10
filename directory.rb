@@ -1,3 +1,5 @@
+require 'csv'
+
 @students = [] 
 
 # determine terminal width
@@ -20,11 +22,11 @@ end
 
 def load_students(filename = "students.csv")
     if File.exists?(filename)
-        File.open(filename, "r") do |f|
-            f.readlines.each do |line|
-                name, cohort, age, height, birthplace, hobbies = line.chomp.split(",")
-                add_student_details(name, cohort, age, height, birthplace, hobbies)
-            end
+        keys = [:name, :cohort, :age, :height, :birthplace, :hobbies]
+        values = CSV.parse(File.read(filename))
+        values.each do |value|
+            @students << Hash[keys.zip(value)]
+            @students.select { |i| i[:cohort] = i[:cohort].to_sym }
         end
         puts "\n"
         puts "Loaded #{@students.count} students from #{filename}".center(@w)
@@ -37,19 +39,18 @@ def load_students(filename = "students.csv")
 end
 
 def save_students(filename = "students.csv")
-    File.open(filename, "w") do |f|
+    CSV.open(filename, "w") do |csv_object|
+        student_data = []
         @students.each do |student|
-            student_data = [student[:name], student[:cohort], student[:age], student[:height], student[:birthplace], student[:hobbies]]
-            csv_line = student_data.join(",")
-            f.puts csv_line
+            student_data = student[:name], student[:cohort], student[:age], student[:height], student[:birthplace], student[:hobbies]
+            csv_object << student_data
         end
-    end
+    end    
     puts "Students saved to file".center(@w)
     puts "\n"
     puts "--------------------------".center(@w)
     puts "\n"
 end
-
 
 def interactive_menu
 	loop do
@@ -102,6 +103,7 @@ def input_students
     puts "Please enter the details of the students".center(@w)
     puts "To finish, type 'Q' at any time and hit return".center(@w)
     puts "\n"
+    new_students = 0
     specifics = %w(name cohort age height birthplace hobbies)
     answer = ""
     while answer != "q" do
@@ -129,17 +131,18 @@ def input_students
             n += 1
         end
         break if answer == "Q"
-        add_student_details(*student_details)
+        new_students = add_student_details(*student_details, new_students)
         puts @students.count == 1 ? "Now we have #{@students.count} student".center(@w) : "Now we have #{@students.count} students".center(@w)
         puts "\n"
         puts "Hit return to enter another student, or type 'Q' to go back to the previous menu.".center(@w)
         answer = STDIN.gets.chomp.downcase
     end
-    puts "Students added successfully".center(@w)
+    puts new_students == 1 ? "#{new_students} student added successfully".center(@w) : "#{new_students} students added successfully".center(@w)
 end
 
-def add_student_details(name, cohort, age, height, birthplace, hobbies)
+def add_student_details(name, cohort, age, height, birthplace, hobbies, new_students)
     @students << {name: name, cohort: cohort.to_sym, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
+    return new_students += 1
 end
 
 def show_students
@@ -197,6 +200,5 @@ def print_footer
     end
 end
 
-
 try_load_students
-interactive_menu 
+interactive_menu
