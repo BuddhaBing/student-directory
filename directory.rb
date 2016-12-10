@@ -128,12 +128,14 @@ def input_students
             student_details << answer
             n += 1
         end
+        break if answer == "Q"
         add_student_details(*student_details)
         puts @students.count == 1 ? "Now we have #{@students.count} student".center(@w) : "Now we have #{@students.count} students".center(@w)
         puts "\n"
         puts "Hit return to enter another student, or type 'Q' to go back to the previous menu.".center(@w)
         answer = STDIN.gets.chomp.downcase
     end
+    puts "Students added successfully".center(@w)
 end
 
 def add_student_details(name, cohort, age, height, birthplace, hobbies)
@@ -198,4 +200,3 @@ end
 
 try_load_students
 interactive_menu 
-
