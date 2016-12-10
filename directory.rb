@@ -62,6 +62,7 @@ def print_menu
     puts "4. Save the list of students to file".center(@w)
     puts "5. Load the list of students from file".center(@w)
     puts "6. Exit application".center(@w)
+    puts "9. Output source code".center(@w)
     puts "\n"
 end
 
@@ -92,6 +93,8 @@ def process(selection)
         when "6"
             puts "Exiting application...".center(@w)
             exit
+        when "9"
+            source_code
         else
             puts "I don't know what you meant, try again".center(@w)
     end 
@@ -138,7 +141,7 @@ end
 
 def add_student_details(name, cohort, age, height, birthplace, hobbies, new_students)
     @students << {name: name, cohort: cohort.to_sym, age: age, height: height, birthplace: birthplace, hobbies: hobbies}
-    return new_students += 1
+    new_students += 1
 end
 
 def show_students(selection)
@@ -194,6 +197,11 @@ def print_footer
     if @students.size != 0
         puts @students.count == 1 ? "\n" + "Overall, we have #{@students.count} great student".center(@w) + "\n" : "\n" + "Overall, we have #{@students.count} great students".center(@w) + "\n"
     end
+end
+
+def source_code
+    source = puts File.read(__FILE__)
+    source.inspect
 end
 
 try_load_students
