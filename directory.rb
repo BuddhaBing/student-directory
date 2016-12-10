@@ -61,7 +61,7 @@ def print_menu
     puts "3. List the students by cohort".center(@w)
     puts "4. Save the list of students to file".center(@w)
     puts "5. Load the list of students from file".center(@w)
-    puts "9. Exit".center(@w)
+    puts "6. Exit application".center(@w)
     puts "\n"
 end
 
@@ -76,20 +76,20 @@ def process(selection)
         when "3"
             puts "Listing students by cohort...".center(@w)
             show_students(selection)
-        when "3"
+        when "4"
             puts "You have selected: \"Save Students\"".center(@w)
             puts "Please enter the filename you would like to save to:".center(@w)
             filename = gets.chomp
             filename = "students.csv" if filename == ""
             save_students(filename)
             puts "Saving students...".center(@w)
-        when "4"
+        when "5"
             puts "You have selected: \"Load Students\"".center(@w)
             puts "Please enter the filename you would like to load from:".center(@w)
             filename = gets.chomp
             filename = "students.csv" if filename == ""
             load_students(filename)
-        when "9"
+        when "6"
             puts "Exiting application...".center(@w)
             exit
         else
