@@ -15,7 +15,7 @@ def try_load_students
         File.exists?(filename)
         load_students(filename)
     else
-        puts "Sorry, #{filename} does not exist.".center(@w)
+        puts "\n" + "Sorry, #{filename} does not exist.".center(@w) + "\n"
         exit
     end
 end
@@ -28,11 +28,8 @@ def load_students(filename = "students.csv")
             @students << Hash[keys.zip(value)]
             @students.select { |i| i[:cohort] = i[:cohort].to_sym }
         end
-        puts "\n"
-        puts "Loaded #{@students.count} students from #{filename}".center(@w)
-        puts "\n"
-        puts "--------------------------".center(@w)
-        puts "\n"
+        puts "\n" + "Loaded #{@students.count} students from #{filename}".center(@w) + "\n"
+        puts "--------------------------".center(@w) + "\n"
     else
         puts "Sorry, #{filename} does not exist.".center(@w)
     end
@@ -47,9 +44,7 @@ def save_students(filename = "students.csv")
         end
     end    
     puts "Students saved to file".center(@w)
-    puts "\n"
-    puts "--------------------------".center(@w)
-    puts "\n"
+    puts "\n" + "--------------------------".center(@w) + "\n"
 end
 
 def interactive_menu
@@ -62,9 +57,10 @@ end
 def print_menu
     puts "\n"
     puts "1. Input the students".center(@w)
-    puts "2. Show the students".center(@w)
-    puts "3. Save the list to file".center(@w)
-    puts "4. Load the list from file".center(@w)
+    puts "2. List the students".center(@w)
+    puts "3. List the students by cohort".center(@w)
+    puts "4. Save the list of students to file".center(@w)
+    puts "5. Load the list of students from file".center(@w)
     puts "9. Exit".center(@w)
     puts "\n"
 end
@@ -76,7 +72,10 @@ def process(selection)
             input_students
         when "2"
             puts "Listing students...".center(@w)
-            show_students
+            show_students(selection)
+        when "3"
+            puts "Listing students by cohort...".center(@w)
+            show_students(selection)
         when "3"
             puts "You have selected: \"Save Students\"".center(@w)
             puts "Please enter the filename you would like to save to:".center(@w)
@@ -99,10 +98,8 @@ def process(selection)
 end
 
 def input_students
-    puts "\n"
-    puts "Please enter the details of the students".center(@w)
-    puts "To finish, type 'Q' at any time and hit return".center(@w)
-    puts "\n"
+    puts "\n" + "Please enter the details of the students".center(@w)
+    puts "To finish, type 'Q' at any time and hit return".center(@w) + "\n"
     new_students = 0
     specifics = %w(name cohort age height birthplace hobbies)
     answer = ""
@@ -133,8 +130,7 @@ def input_students
         break if answer == "Q"
         new_students = add_student_details(*student_details, new_students)
         puts @students.count == 1 ? "Now we have #{@students.count} student".center(@w) : "Now we have #{@students.count} students".center(@w)
-        puts "\n"
-        puts "Hit return to enter another student, or type 'Q' to go back to the previous menu.".center(@w)
+        puts "\n" + "Hit return to enter another student, or type 'Q' to go back to the previous menu.".center(@w)
         answer = STDIN.gets.chomp.downcase
     end
     puts new_students == 1 ? "#{new_students} student added successfully".center(@w) : "#{new_students} students added successfully".center(@w)
@@ -145,17 +141,22 @@ def add_student_details(name, cohort, age, height, birthplace, hobbies, new_stud
     return new_students += 1
 end
 
-def show_students
-    print_header
-    print_students
-    print_students_by_cohort
-    print_footer
+def show_students(selection)
+    case selection
+    when "2"
+        print_header
+        print_students
+        print_footer
+    when "3"
+        print_header
+        print_students_by_cohort
+        print_footer
+    end
 end
 
 def print_header
-    puts "\n\n"
     header = "The Students of Villains Academy"
-    puts header.center(@w)
+    puts "\n\n" + header.center(@w)
     puts ("-" * header.length).center(@w)
 end
 
@@ -167,9 +168,7 @@ def print_students
             puts "#{index + 1}. #{@students[index][:name]} (#{@students[index][:cohort]} cohort) - Age: #{@students[index][:age]}, Height: #{@students[index][:height]}, Birthplace: #{@students[index][:birthplace]}, Hobbies: #{@students[index][:hobbies]}".center(@w)
             index += 1
         end
-        puts "\n"
-        puts "--------------------------".center(@w)
-        puts "\n"
+        puts "\n" + "--------------------------".center(@w)
     else
         puts "There are no students. I'm lonely :(".center(@w)
     end
@@ -178,25 +177,22 @@ end
 def print_students_by_cohort
     if @students.size != 0
         @cohorts.each do |x|
-            puts "#{x} cohort:".center(@w)
-            puts "\n"
+            cohort_title = false
             @students.map do |i|
                 if i[:cohort] == x.to_sym
+                    puts "\n" + "#{x} cohort:".center(@w) + "\n" if cohort_title == false
+                    cohort_title = true
                     puts "#{i[:name]} - Age: #{i[:age]}, Height: #{i[:height]}, Birthplace: #{i[:birthplace]}, Hobbies: #{i[:hobbies]}".center(@w)
                 end
             end
-            puts "\n"
-            puts "-------------".center(@w)
-            puts "\n"
+            puts "\n" + "-------------".center(@w) + "\n" if cohort_title == true
         end
     end
 end
 
 def print_footer    
     if @students.size != 0
-        puts "\n"
-        puts @students.count == 1 ? "Overall, we have #{@students.count} great student".center(@w) : "Overall, we have #{@students.count} great students".center(@w)
-        puts "\n"
+        puts @students.count == 1 ? "\n" + "Overall, we have #{@students.count} great student".center(@w) + "\n" : "\n" + "Overall, we have #{@students.count} great students".center(@w) + "\n"
     end
 end
 
